@@ -19,7 +19,7 @@ public class Spring : MonoBehaviour
 
     void IncreasePower()
     {
-        // Increase power en shrink spring as long as we hold down the pull button.
+        // Increase power and shrink spring as long as we hold down the pull button.
         if (springPower < springMaxPower){
             springPower ++;
             springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y, springTrans.localScale.z - 1f);
@@ -28,6 +28,7 @@ public class Spring : MonoBehaviour
 
     void ResetSpring()
     {
+        // Decrease power and enlarge spring as long as the button was letgo.
         if (springPower != 0)
         {
             springPower --;

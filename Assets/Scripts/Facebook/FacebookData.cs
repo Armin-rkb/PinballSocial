@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
 using Facebook.Unity;
 
-public class Test : MonoBehaviour
+public class FacebookData : MonoBehaviour
 {
     [SerializeField]
     private GameObject notLoggedInUI;
@@ -13,6 +14,10 @@ public class Test : MonoBehaviour
     [SerializeField]
     private Image playerPictureUI;
     private Texture2D profilePicture;
+    public Texture2D ProfilePicture
+    {
+        get { return profilePicture; }
+    }
 
     [SerializeField]
     private Text welcomeText;
@@ -24,6 +29,8 @@ public class Test : MonoBehaviour
             FB.Init(InitCallback);
         }
         ShowUI();
+
+        DontDestroyOnLoad(gameObject);
 	}
 
     void InitCallback()
@@ -49,17 +56,7 @@ public class Test : MonoBehaviour
             ShowUI();
         }
     }
-
-    public void Share()
-    {
-        // Een post maken waar je een score kan sharen.
-    }
-
-    public void Invite()
-    {
-        FB.AppRequest(message: "This pinball game is lots of fun! Play it right now!", title: "Try this out!");
-    }
-
+    
     // Check if the login went succesfull.
     void LoginCallback(ILoginResult result)
     {
@@ -70,7 +67,7 @@ public class Test : MonoBehaviour
             // Getting the picture of the logged in user.
             FB.API("me/picture?width=100&height=100", HttpMethod.GET, PictureCallback);
 
-            // Gettomg the name of the logged in user.
+            // Getting the name of the logged in user.
             FB.API("me?fields=first_name", HttpMethod.GET, NameCallback);
 
             ShowUI();

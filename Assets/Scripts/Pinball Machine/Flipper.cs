@@ -23,6 +23,14 @@ public class Flipper : MonoBehaviour
     [SerializeField]
     private string inputKeyName;
 
+    void Start()
+    {
+        UseFlipper();
+        ResetFlipper();
+    }
+    
+    // Using the Update for keyboard testing.
+    /*
     void Update()
     {
         if (Input.GetKey(inputKeyName))
@@ -31,9 +39,12 @@ public class Flipper : MonoBehaviour
         else if (!Input.GetKey(inputKeyName) && hinge.limits.max != 0)
             ResetFlipper();
     }
-
-    void UseFlipper()
+    */
+    public void UseFlipper()
     {
+        // Stop the running LimitAngle coroutine.
+        StopAllCoroutines();
+
         // Setting our variables.
         limits.max = maxLimit;
         motor.force = forcePower;
@@ -47,16 +58,32 @@ public class Flipper : MonoBehaviour
         hinge.motor = motor;
     }
 
-    void ResetFlipper()
+    public void ResetFlipper()
     {
-        // By decreasing the limit to zero will smoothly reach the default position.
-        limits.max -= 4;
+        StartCoroutine(LimitAngle());
 
         // Stop using the hinge motor.
         hinge.useMotor = false;
 
-        // Setting the hinge variables.
-        hinge.limits = limits;
+        // Setting the hinge variable.
         hinge.motor = motor;
+    }
+
+    IEnumerator LimitAngle()
+    {
+        while (true)
+        {
+            // By decreasing the limit to zero will smoothly reach the default position.
+            if (hinge.limits.max != 0)
+                limits.max -= 30;
+
+            // Once we reached our default position; stop running this function.
+            else if (hinge.limits.max == 0)
+                StopAllCoroutines();
+
+            // Setting the hinge variable.
+            hinge.limits = limits;
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 }

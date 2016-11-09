@@ -7,20 +7,16 @@ using Facebook.Unity;
 
 public class FacebookData : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject notLoggedInUI;
-    [SerializeField]
-    private GameObject loggedInUI;
-    [SerializeField]
-    private Image playerPictureUI;
+    [SerializeField] private GameObject notLoggedInUI;
+    [SerializeField] private GameObject loggedInUI;
+    [SerializeField] private Image playerPictureUI;
+    [SerializeField] private Text welcomeText;
+
     private Texture2D profilePicture;
     public Texture2D ProfilePicture
     {
         get { return profilePicture; }
     }
-
-    [SerializeField]
-    private Text welcomeText;
 
 	void Awake ()
     {
@@ -32,6 +28,14 @@ public class FacebookData : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 	}
+
+    void Start()
+    {
+        if (FB.IsLoggedIn)
+            loggedInUI.SetActive(true);
+        else if (!FB.IsLoggedIn)
+            notLoggedInUI.SetActive(true);
+    }
 
     void InitCallback()
     {

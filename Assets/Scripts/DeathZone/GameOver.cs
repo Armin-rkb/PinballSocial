@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class GameOver : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class GameOver : MonoBehaviour
     void OnTriggerEnter(Collider coll)
     {
         // Stop the game when the ball hits the deathzone.
-        if (coll.gameObject.CompareTag("Ball"))
+        if (coll.gameObject.CompareTag(Tags.ball))
             StopGame();
     }
 

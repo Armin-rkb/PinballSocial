@@ -9,6 +9,8 @@ public class Bumper : MonoBehaviour
     private Vector3 originalScale;
     private bool hasGrown;
 
+    private IEnumerator enlargeBumper;
+
     // How hard we will push the ball away.
     [SerializeField] private float bumpForce;
 
@@ -21,12 +23,13 @@ public class Bumper : MonoBehaviour
 
     void Start()
     {
+        enlargeBumper = EnlargeBumper();
         originalScale = transform.localScale;
     }
 
     void OnCollisionEnter(Collision coll)
     {
-        if (coll.gameObject.CompareTag("Ball"))
+        if (coll.gameObject.CompareTag(Tags.ball))
             BounceBall(coll.rigidbody);
     }
 
@@ -36,7 +39,7 @@ public class Bumper : MonoBehaviour
         rb.AddExplosionForce(bumpForce, transform.position, 0);
 
         // Add the small grow effect of the bumper.
-        StartCoroutine(EnlargeBumper());
+        StartCoroutine(enlargeBumper);
 
         // Notify all subscribers of BallHit.
         if (BallHit != null)
@@ -55,8 +58,8 @@ public class Bumper : MonoBehaviour
             else
             {
                 transform.localScale = new Vector3(originalScale.x, originalScale.y, originalScale.z);
-                hasGrown = true;
-                StopAllCoroutines();
+                hasGrown = false;
+                StopCoroutine(enlargeBumper);
             }
 
             yield return new WaitForSeconds(0.15f);

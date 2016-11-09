@@ -3,26 +3,21 @@ using System.Collections;
 
 public class Spring : MonoBehaviour
 {
-    [SerializeField]
-    private int springPower;
+    [SerializeField] private int springPower;
     private int springMaxPower = 50;
     private bool canPull = true;
-    [SerializeField]
-    private Transform springTrans;
+    [SerializeField] private Transform springTrans;
     
-    [SerializeField]
-    private Transform rayTrans;
-    [SerializeField]
-    private LayerMask rayLayer;
-    [SerializeField]
-    private float rayDistance;
+    [SerializeField] private Transform rayTrans;
+    [SerializeField] private LayerMask rayLayer;
+    [SerializeField] private float rayDistance;
 
     void IncreasePower()
     {
         // Increase power and shrink spring as long as we hold down the pull button.
         if (springPower < springMaxPower){
             springPower ++;
-            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y, springTrans.localScale.z - 1f);
+            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y, springTrans.localScale.z - 2f);
         }
     }
 
@@ -33,7 +28,7 @@ public class Spring : MonoBehaviour
         {
             springPower --;
             canPull = false;
-            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y, springTrans.localScale.z + 1f);
+            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y, springTrans.localScale.z + 2f);
         }
         // The spring is reset.
         else if (springPower == 0)

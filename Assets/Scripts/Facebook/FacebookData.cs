@@ -12,6 +12,7 @@ public class FacebookData : MonoBehaviour
     [SerializeField] private Image playerPictureUI;
     [SerializeField] private Text welcomeText;
 
+    private IEnumerator checkSuccesfulLogout;
     private Texture2D profilePicture;
     public Texture2D ProfilePicture
     {
@@ -25,7 +26,6 @@ public class FacebookData : MonoBehaviour
             FB.Init(InitCallback);
         }
         ShowUI();
-
         DontDestroyOnLoad(gameObject);
 	}
 
@@ -35,11 +35,14 @@ public class FacebookData : MonoBehaviour
             loggedInUI.SetActive(true);
         else if (!FB.IsLoggedIn)
             notLoggedInUI.SetActive(true);
+
+        checkSuccesfulLogout = CheckSuccesfulLogin();
     }
 
     void InitCallback()
     {
         print("Facebook succesfully initialized!");
+        Logout();
     }
 
     // Login function for our button.
@@ -54,10 +57,25 @@ public class FacebookData : MonoBehaviour
     // Logout function for our button.
     public void Logout()
     {
-        if (FB.IsLoggedIn)
+        FB.LogOut();
+        StartCoroutine(checkSuccesfulLogout);
+    }
+
+    IEnumerator CheckSuccesfulLogin()
+    {
+        while (true)
         {
-            FB.LogOut();
-            ShowUI();
+            if (FB.IsLoggedIn)
+            {
+                FB.LogOut();
+            }
+            else
+            {
+                ShowUI();
+                StopCoroutine(checkSuccesfulLogout);
+            }
+
+            yield return new WaitForSeconds(0.1f);
         }
     }
     

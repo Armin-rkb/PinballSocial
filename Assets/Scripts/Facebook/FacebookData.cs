@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
-using System;
 using Facebook.Unity;
 
 public class FacebookData : MonoBehaviour
@@ -42,6 +41,7 @@ public class FacebookData : MonoBehaviour
     void InitCallback()
     {
         print("Facebook succesfully initialized!");
+        // Making sure we are logged out, when starting.
         Logout();
     }
 

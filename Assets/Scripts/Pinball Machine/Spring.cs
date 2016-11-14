@@ -17,7 +17,7 @@ public class Spring : MonoBehaviour
         // Increase power and shrink spring as long as we hold down the pull button.
         if (springPower < springMaxPower){
             springPower ++;
-            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y, springTrans.localScale.z - 2f);
+            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y - 2f, springTrans.localScale.z);
         }
     }
 
@@ -28,7 +28,7 @@ public class Spring : MonoBehaviour
         {
             springPower --;
             canPull = false;
-            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y, springTrans.localScale.z + 2f);
+            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y + 2f, springTrans.localScale.z);
         }
         // The spring is reset.
         else if (springPower == 0)
@@ -49,7 +49,8 @@ public class Spring : MonoBehaviour
 
     void PushBall(Rigidbody ball)
     {
-        ball.AddForce(springTrans.forward * (springPower * 3), ForceMode.Impulse);
+        // Shoot the ball Forward.
+        ball.AddForce(-springTrans.up * (springPower * 3), ForceMode.Impulse);
     }
 
     // Button to charge spring power.

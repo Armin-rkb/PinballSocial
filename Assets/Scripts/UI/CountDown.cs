@@ -10,6 +10,8 @@ public class CountDown : MonoBehaviour
     [SerializeField] private int time = 3;
     // The UI that we will disable once the countdown is finished.
     [SerializeField] private GameObject countDownUI;
+    // The UI that we will enable once the countdown is finished.
+    [SerializeField] private GameObject actionUI;
     // The background of our UI that we will smoothly fade.
     [SerializeField] private Image backgroundImage;
     // Wall that stops us from having a head start.
@@ -21,6 +23,7 @@ public class CountDown : MonoBehaviour
     void Start()
     {
         countDownUI.SetActive(true);
+        actionUI.SetActive(false);
 
         StartCoroutine(FadeBackground(backgroundImage.color, 0.025f));
         startCountDown = StartCountDown();
@@ -48,6 +51,7 @@ public class CountDown : MonoBehaviour
             case 0:
                 countDownText.text = "Start!";
                 springWall.SetActive(false);
+                actionUI.SetActive(true);
                 break;
             case -1:
                 StopCoroutine(startCountDown);

@@ -7,7 +7,7 @@ public class CameraFollow : MonoBehaviour
     // Object we want to follow.
     [SerializeField] private Transform followTarget;
     // Delayed time to reach our needed position.
-    [Range(0,1)] [SerializeField] private float dampTime;
+    [Range(0,5)] [SerializeField] private float dampTime;
 
     // Distance between our target and the camera.
     private Vector3 offset;
@@ -16,7 +16,7 @@ public class CameraFollow : MonoBehaviour
     // The end position we will head towards.
     private Vector3 targetPosition;
     // Position of the spring.(Needs to be improved)
-    private Vector3 springPosition = new Vector3(31, -17, 163);
+    [SerializeField] private Transform springTrans;
 
     // We enable and disable this boolean when we want to switch to another angle.
     private bool canFollow;
@@ -48,7 +48,7 @@ public class CameraFollow : MonoBehaviour
 
     void GoToSpring()
     {
-        targetPosition = springPosition;
+        targetPosition = springTrans.position;
 
         cameraTrans.position = Vector3.Lerp(cameraTrans.position, targetPosition, dampTime * Time.deltaTime);
     }

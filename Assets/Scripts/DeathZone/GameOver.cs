@@ -16,12 +16,14 @@ public class GameOver : MonoBehaviour
     {
         // Stop the game when the ball hits the deathzone.
         if (coll.gameObject.CompareTag(Tags.ball))
-            StopGame();
+            StopGame(coll.GetComponent<Rigidbody>());
     }
 
     // Hide the player buttons and show the gameover screen.
-    void StopGame()
+    void StopGame(Rigidbody ball)
     {
+        Destroy(ball); // Destroying our ball's physics so it wont bounce everywhere when we are gameover. 
+
         GameOverMenu.SetActive(true);
         ActionButtons.SetActive(false);
     }

@@ -19,10 +19,6 @@ public class Flipper : MonoBehaviour
     // The amount of force we will keep using to reach the targetVelocity.
     [SerializeField] private float forcePower;
 
-    // Key we need to press to activate motor.
-    [SerializeField]
-    private string inputKeyName;
-
     private IEnumerator limitAngle;
 
     void Start()

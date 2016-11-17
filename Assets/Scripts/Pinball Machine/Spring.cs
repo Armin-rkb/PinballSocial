@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Spring : MonoBehaviour
 {
-    [SerializeField] private int springPower;
-    private int springMaxPower = 50;
+    private int springPower;
+    private int springMaxPower = 200;
     private bool canPull = true;
     [SerializeField] private Transform springTrans;
     
@@ -16,7 +16,7 @@ public class Spring : MonoBehaviour
     {
         // Increase power and shrink spring as long as we hold down the pull button.
         if (springPower < springMaxPower){
-            springPower ++;
+            springPower += 4;
             springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y - 2f, springTrans.localScale.z);
         }
     }
@@ -26,7 +26,7 @@ public class Spring : MonoBehaviour
         // Decrease power and enlarge spring as long as the button was letgo.
         if (springPower != 0)
         {
-            springPower --;
+            springPower -= 4;
             canPull = false;
             springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y + 2f, springTrans.localScale.z);
         }

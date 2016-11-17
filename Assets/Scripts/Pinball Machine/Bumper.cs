@@ -6,6 +6,7 @@ public class Bumper : MonoBehaviour
     public delegate void OnBallHit(Bumper bumper);
     public static event OnBallHit BallHit;
 
+    [SerializeField] private ParticleSystem particle;
     private Vector3 originalScale;
     private bool hasGrown;
 
@@ -35,9 +36,13 @@ public class Bumper : MonoBehaviour
 
     void BounceBall(Rigidbody rb)
     {
+        // Play the particle effect.
+        if(particle != null)
+            particle.Play();
+
         // Bounce the ball Away.
         rb.AddExplosionForce(bumpForce, transform.position, 0);
-
+        
         // Add the small grow effect of the bumper.
         StartCoroutine(enlargeBumper);
 

@@ -56,7 +56,6 @@ public class CountDown : MonoBehaviour
                 break;
             case 0:
                 countDownText.text = "Start!";
-                //springWall.SetActive(false);
                 actionUI.SetActive(true);
                 break;
             case -1:

@@ -3,38 +3,60 @@ using System.Collections;
 
 public class Spring : MonoBehaviour
 {
-    private int springPower;
-    private int springMaxPower = 200;
+    private int springPower = 10;
+    private int springMaxPower = 175;
     private bool canPull = true;
     [SerializeField] private Transform springTrans;
-    
+
+    private IEnumerator increasePower;
+    private IEnumerator resetSpring;
+
+    // Raycast variables
     [SerializeField] private Transform rayTrans;
     [SerializeField] private LayerMask rayLayer;
     [SerializeField] private float rayDistance;
 
-    void IncreasePower()
+    void Start()
     {
-        // Increase power and shrink spring as long as we hold down the pull button.
-        if (springPower < springMaxPower){
-            springPower += 4;
-            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y - 2f, springTrans.localScale.z);
+        increasePower = IncreasePower();
+        resetSpring = ResetSpring();
+    }
+
+    IEnumerator IncreasePower()
+    {
+        while (true)
+        {
+            // Increase power and pull the spring down as long as we hold down the spring button.
+            if (springPower < springMaxPower)
+            {
+                springPower += 5;
+                springTrans.Translate(-Vector3.down * 40 * Time.deltaTime);
+            }
+
+            yield return new WaitForSeconds(0.025f);
         }
     }
 
-    void ResetSpring()
+    IEnumerator ResetSpring()
     {
-        // Decrease power and enlarge spring as long as the button was letgo.
-        if (springPower != 0)
+        while (true)
         {
-            springPower -= 4;
-            canPull = false;
-            springTrans.localScale = new Vector3(springTrans.localScale.x, springTrans.localScale.y + 2f, springTrans.localScale.z);
-        }
-        // The spring is reset.
-        else if (springPower == 0)
-        {
-            canPull = true;
-            CancelInvoke("ResetSpring");
+            // Decrease power and push the spring up as long as the spring button is letgo off.
+            if (springPower != 0)
+            {
+                springPower -= 5;
+                canPull = false;
+                springTrans.Translate(Vector3.down * 40 * Time.deltaTime);
+            }
+
+            // The spring is reset.
+            else if (springPower == 0)
+            {
+                canPull = true;
+                StopCoroutine(resetSpring);
+            }
+
+            yield return new WaitForSeconds(0.025f);
         }
     }
 
@@ -42,7 +64,8 @@ public class Spring : MonoBehaviour
     {
         // Make a raycast at the top of our spring to check if the ball is in our range.
         RaycastHit rayHit;
-        if (Physics.Raycast(rayTrans.position, rayTrans.forward, out rayHit, rayDistance, rayLayer)){
+        if (Physics.Raycast(rayTrans.position, rayTrans.forward, out rayHit, rayDistance, rayLayer))
+        {
             PushBall(rayHit.rigidbody);
         }
     }
@@ -57,14 +80,14 @@ public class Spring : MonoBehaviour
     public void PullSpring()
     {
         if (canPull)
-            InvokeRepeating("IncreasePower", 0, 0.05f);
+            StartCoroutine(increasePower);
     }
 
     // Once we charged the spring; check for the ball.
     public void LetGoSpring()
     {
-        CancelInvoke("IncreasePower");
-        InvokeRepeating("ResetSpring", 0, 0.05f);
+        StopCoroutine(increasePower);
+        StartCoroutine(resetSpring);
         CheckForBall();
     }
 }

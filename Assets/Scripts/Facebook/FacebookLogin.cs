@@ -1,22 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 using Facebook.Unity;
 
-public class FacebookData : MonoBehaviour
+public class FacebookLogin : MonoBehaviour
 {
     [SerializeField] private GameObject notLoggedInUI;
     [SerializeField] private GameObject loggedInUI;
-    [SerializeField] private Image playerPictureUI;
-    [SerializeField] private Text welcomeText;
 
     private IEnumerator checkSuccesfulLogout;
-    private Texture2D profilePicture;
-    public Texture2D ProfilePicture
-    {
-        get { return profilePicture; }
-    }
+    private FacebookUserData facebookUserData;
 
 	void Awake ()
     {
@@ -24,8 +17,10 @@ public class FacebookData : MonoBehaviour
         {
             FB.Init(InitCallback);
         }
+
+        facebookUserData = FindObjectOfType<FacebookUserData>();
+
         ShowUI();
-        DontDestroyOnLoad(gameObject);
 	}
 
     void Start()
@@ -37,7 +32,7 @@ public class FacebookData : MonoBehaviour
 
         checkSuccesfulLogout = CheckSuccesfulLogin();
     }
-
+    
     void InitCallback()
     {
         print("Facebook succesfully initialized!");
@@ -87,11 +82,11 @@ public class FacebookData : MonoBehaviour
             print("Login went succesfull");
 
             // Getting the picture of the logged in user.
-            FB.API("me/picture?width=100&height=100", HttpMethod.GET, PictureCallback);
+            FB.API("me/picture?width=100&height=100", HttpMethod.GET, facebookUserData.PictureCallback);
 
             // Getting the name of the logged in user.
-            FB.API("me?fields=first_name", HttpMethod.GET, NameCallback);
-
+            FB.API("me?fields=first_name", HttpMethod.GET, facebookUserData.NameCallback);
+            
             ShowUI();
         }
         else
@@ -113,19 +108,5 @@ public class FacebookData : MonoBehaviour
             loggedInUI.SetActive(false);
             notLoggedInUI.SetActive(true);
         }
-    }
-
-    void PictureCallback(IGraphResult result)
-    {
-        profilePicture = result.Texture;
-        // Setting the profile picture in the UI.
-        playerPictureUI.sprite = Sprite.Create(profilePicture, new Rect(0, 0, 100, 100), new Vector2(0.5f, 0.5f));
-    }
-
-    void NameCallback(IGraphResult result)
-    {
-        IDictionary<string, object> playerName = result.ResultDictionary;
-        // Setting the name in our welcome text.
-        welcomeText.text = "Welcome, " + playerName["first_name"];
     }
 }

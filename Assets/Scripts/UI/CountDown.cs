@@ -15,18 +15,21 @@ public class CountDown : MonoBehaviour
     // The background of our UI that we will smoothly fade.
     [SerializeField] private Image backgroundImage;
     // Wall that stops us from having a head start.
-    [SerializeField] private GameObject springWall;
+    [SerializeField] private SpringWall springWall;
 
     [SerializeField] private CameraFollow cameraFollow;
     private IEnumerator startCountDown;
+    private IEnumerator fadeBackground;
 
     void Start()
     {
         countDownUI.SetActive(true);
         actionUI.SetActive(false);
 
-        StartCoroutine(FadeBackground(backgroundImage.color, 0.025f));
+        fadeBackground = FadeBackground(backgroundImage.color, 0.025f);
         startCountDown = StartCountDown();
+
+        StartCoroutine(fadeBackground);
         StartCoroutine(startCountDown);
     }
 
@@ -44,13 +47,16 @@ public class CountDown : MonoBehaviour
     {
         switch(time)
         {
+            case 2:
+                StartCoroutine(springWall.lowerWall);
+                break;
             case 1:
                 countDownText.text = time.ToString();
                 cameraFollow.IsWaiting = false;
                 break;
             case 0:
                 countDownText.text = "Start!";
-                springWall.SetActive(false);
+                //springWall.SetActive(false);
                 actionUI.SetActive(true);
                 break;
             case -1:
@@ -67,8 +73,17 @@ public class CountDown : MonoBehaviour
     {
         while (true)
         {
-            imageColor.a -= fadeTime;
-            backgroundImage.color = imageColor;
+            // Keep fading the image until the alpha is 0.
+            if (imageColor.a >= 0)
+            {
+                imageColor.a -= fadeTime;
+                backgroundImage.color = imageColor;
+            }
+
+            // Stop the function once we're done fading.
+            else if (imageColor.a <= 0)
+                StopCoroutine(fadeBackground);
+
             yield return new WaitForSeconds(0.05f);
         }
     }

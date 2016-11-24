@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
 using Facebook.Unity;
-using System.Collections;
 
 public class Ball : MonoBehaviour
 {
-    private FacebookData facebookData;
+    private FacebookUserData facebookUserData;
     private Texture2D texture;
     [SerializeField] private Renderer rend;
 
     void Awake()
     {
-        facebookData = FindObjectOfType<FacebookData>();
+        facebookUserData = FindObjectOfType<FacebookUserData>();
     }
 
 	void Start ()
@@ -27,7 +26,7 @@ public class Ball : MonoBehaviour
 
     void ChangeMaterialTexture()
     {
-        texture = facebookData.ProfilePicture;
+        texture = facebookUserData.UserPictureTex;
         rend.material.mainTexture = texture;
     }
 }

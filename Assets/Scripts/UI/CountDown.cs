@@ -49,6 +49,7 @@ public class CountDown : MonoBehaviour
         {
             case 2:
                 StartCoroutine(springWall.lowerWall);
+                countDownText.text = time.ToString();
                 break;
             case 1:
                 countDownText.text = time.ToString();

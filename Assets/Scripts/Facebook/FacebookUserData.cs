@@ -23,6 +23,7 @@ public class FacebookUserData : MonoBehaviour
     }
 
     private UserGreeting userGreeting;
+    [SerializeField] private FacebookLogin facebookLogin;
 
 	void Awake ()
     {
@@ -32,8 +33,14 @@ public class FacebookUserData : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        
         userGreeting = FindObjectOfType<UserGreeting>();
+    }
+
+    void Start()
+    {
+        // Making sure we are logged out when starting.
+        facebookLogin.Logout();
     }
 
     public void PictureCallback(IGraphResult result)

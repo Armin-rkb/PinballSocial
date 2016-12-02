@@ -36,8 +36,6 @@ public class FacebookLogin : MonoBehaviour
     void InitCallback()
     {
         print("Facebook succesfully initialized!");
-        // Making sure we are logged out, when starting.
-        Logout();
     }
 
     // Login function for our button.
@@ -45,8 +43,10 @@ public class FacebookLogin : MonoBehaviour
     {
         if (!FB.IsLoggedIn)
         {
-            FB.LogInWithReadPermissions(new List<string> {"user_friends"}, LoginCallback);
+            FB.LogInWithReadPermissions(new List<string> { "user_friends" }, LoginCallback);
         }
+        else if (FB.IsLoggedIn)
+            Logout();
     }
 
     // Logout function for our button.
@@ -61,9 +61,7 @@ public class FacebookLogin : MonoBehaviour
         while (true)
         {
             if (FB.IsLoggedIn)
-            {
                 FB.LogOut();
-            }
             else
             {
                 ShowUI();

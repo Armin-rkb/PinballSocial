@@ -22,7 +22,7 @@ public class SpringWall : MonoBehaviour
             if (transform.position == defaultTrans.position)
                 StopCoroutine(raiseWall);
             else
-                transform.position = Vector3.MoveTowards(transform.position, defaultTrans.position, 10 * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, defaultTrans.position, 20 * Time.deltaTime);
 
             yield return new WaitForSeconds(0.02f);
         }
@@ -35,7 +35,7 @@ public class SpringWall : MonoBehaviour
             if (transform.position == lowerTrans.position)
                 StopCoroutine(lowerWall);
             else
-                transform.position = Vector3.MoveTowards(transform.position, lowerTrans.position, 10 * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, lowerTrans.position, 20 * Time.deltaTime);
 
             yield return new WaitForSeconds(0.02f);
         }
